@@ -3,8 +3,8 @@
  * @see https://github.com/danguilherme/ng-cli-pug-loader
  */
 const fs = require('fs');
-const commonCliConfig = '__COMMON_CLI_CONFIG_PATH__';
-const pugRules = '__PUG_RULES__';
+const commonCliConfig = 'node_modules/@angular-devkit/build-angular/src/webpack/configs/common.js';
+const pugRules = '{test:/\\.(pug|jade)$/,exclude:/\\.(include|partial)\\.(pug|jade)$/,use:[{loader:"apply-loader" },{loader:"pug-loader"}]},{test:/\\.(include|partial)\\.(pug|jade)$/,loader:"pug-loader"},';
 
 fs.readFile(commonCliConfig, (err, data) => {
   if (err) throw err;
@@ -29,7 +29,7 @@ fs.readFile(commonCliConfig, (err, data) => {
  * Set's directTemplateLoading: false to allow custom pug template loader to work
  * @see https://github.com/angular/angular-cli/issues/14534
  */
-const typescriptCliConfig = '__TYPESCRIPT_CLI_CONFIG_PATH__';
+const typescriptCliConfig = 'node_modules/@angular-devkit/build-angular/src/webpack/configs/typescript.js';
 
 fs.readFile(typescriptCliConfig, (err, data) => {
   if (err) { throw err; }
@@ -38,12 +38,12 @@ fs.readFile(typescriptCliConfig, (err, data) => {
 
   // check if needed to be set or already set
   if (typescriptText.indexOf('directTemplateLoading') === -1 || typescriptText.indexOf('directTemplateLoading: false,') > -1) { return; }
-  
+
   // update the setting
   const output = typescriptText.replace('directTemplateLoading: true,', 'directTemplateLoading: false,');
 
   // rewrite the file
-  const file2 = fs.openSync(typescriptCliConfig, 'r+');  
+  const file2 = fs.openSync(typescriptCliConfig, 'r+');
   fs.writeFile(file2, output, error => {
     if (error)
       console.error("An error occurred while overwriting Angular CLI's Webpack config");
